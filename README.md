@@ -3,6 +3,10 @@
 Various simulations of non-relativistic single particle quantum mechanics in bounded 2D potentials.
 The eigenstates animation are inspired by the awesome art by [Hudson Smith](https://www.instagram.com/hudthescientist/).
 
+The prerequisites for using the program are listed in the `requirements.txt` file. Run the script `discrete_hamiltonian.py` to show a numerical simulation of
+a wavepacket in a Harmonic Oscillator. The script `eigenstates_animation.py` displays eigenstates in various potentials, and `compare_with_analytic.py` compares
+numerically computed energy eigenvalues of the Harmonic Oscillator and Infinite Square Well with their analytical versions. 
+
 ## References:
 
 Discretizing the Hamiltonian:
