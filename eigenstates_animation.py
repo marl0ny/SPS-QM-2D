@@ -20,14 +20,14 @@ M = 50
 # Various Potentials
 
 # ISW
-V = np.zeros([N, N])
+# V = np.zeros([N, N])
 
 # SHO
 # V = M_E*200.0*((X/L)**2 + (Y/L)**2)/2.0
 
 # SHO with Gaussian Barrier
-V = (M_E*400.0*((X/L)**2 + (Y/L)**2)/2.0 + 
-     100*np.exp(-0.5*((X/L)**2 + (Y/L)**2)/0.1**2))
+# V = (M_E*400.0*((X/L)**2 + (Y/L)**2)/2.0 + 
+#      100*np.exp(-0.5*((X/L)**2 + (Y/L)**2)/0.1**2))
 
 # Cone
 # V = 50.0*(np.sqrt((X/L)**2 + (Y/L)**2))
@@ -45,24 +45,27 @@ V = (M_E*400.0*((X/L)**2 + (Y/L)**2)/2.0 +
 # V += V2
 
 # Four Square Wells
-V = np.zeros([N, N])
-height = 150.0
-V[:, 64*N//128: 65*N//128] = height
-V[64*N//128: 65*N//128, :] = height
-V[0: 4*N//32, :] = height
-V[:, 0: 4*N//32] = height
-V[N - 4*N//32: N, :] = height
-V[:, N - 4*N//32: N] = height
+# V = np.zeros([N, N])
+# height = 150.0
+# V[:, 64*N//128: 65*N//128] = height
+# V[64*N//128: 65*N//128, :] = height
+# V[0: 4*N//32, :] = height
+# V[:, 0: 4*N//32] = height
+# V[N - 4*N//32: N, :] = height
+# V[:, N - 4*N//32: N] = height
 
 # Inverted Gaussian Well
 # V = 50.0*(1.0 - np.exp(-0.5*((X/L)**2 + (Y/L)**2)/0.25**2))
 
 # Inverted Gaussian Wells
-# s = 0.12
-# V = 50.0*(1.0 - np.exp(-0.5*((X/L)**2 + (Y/L - 0.25)**2)/s**2)
-#           - np.exp(-0.5*((X/L)**2 + (Y/L + 0.25)**2)/s**2)
-#           - np.exp(-0.5*((X/L - 0.25)**2 + (Y/L)**2)/s**2)
-#           - np.exp(-0.5*((X/L + 0.25)**2 + (Y/L)**2)/s**2))
+s = 0.12
+V = 50.0*(1.0 - np.exp(-0.5*((X/L)**2 + (Y/L - 0.25)**2)/s**2)
+          - np.exp(-0.5*((X/L)**2 + (Y/L + 0.25)**2)/s**2)
+          - np.exp(-0.5*((X/L - 0.25)**2 + (Y/L)**2)/s**2)
+          - np.exp(-0.5*((X/L + 0.25)**2 + (Y/L)**2)/s**2))
+
+# tanh potential
+# V = 50.0*np.tanh((X/L)**2 + (Y/L)**2)
 
 # Or use an image to define the potential instead?
 # Note that the image must be a sqaure whose length is equal to N.
@@ -71,7 +74,6 @@ V[:, N - 4*N//32: N] = height
 #      + im[0:N, 0:N, 2])/3.0)
 # V = 15.0*V/np.amax(V)
 
-
 t = perf_counter()
 H = discrete_hamiltonian(V)
 H = H.reshape([N*N, N*N])
@@ -79,7 +81,7 @@ values, vectors = eigsh(H, which='SM', k=M)
 print(f"Time taken: {perf_counter() - t} s")
 V = V.T
 data = {'t': 0.0, 'e': np.exp(2.0j*np.pi/32.0), 
-        'animation': None, 'count_updated': False
+        'animation': None,
        }
 br = 3.0*N/4.0
 fig = plt.figure(dpi=120)
@@ -140,7 +142,6 @@ def animation_func(*arg):
                             values[level]/values[0]])
         im.set_data(complex_to_colour(
                     np.reshape(br*e*vectors.T[level], [N, N])))
-        data['count_updated'] = False
     return im, e_level, txt
 
 

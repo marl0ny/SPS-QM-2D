@@ -3,14 +3,20 @@
 Various simulations of non-relativistic single particle quantum mechanics in bounded 2D potentials.
 The eigenstates animation are inspired by the awesome art by [Hudson Smith](https://www.instagram.com/hudthescientist/).
 
-The prerequisites for using the program are listed in the `requirements.txt` file. Run the script `discrete_hamiltonian.py` to show a numerical simulation of
+The prerequisites for using the program are listed in the `requirements.txt` file. Run `discrete_hamiltonian.py` to show a numerical simulation of
 a wavepacket in a Harmonic Oscillator. The script `eigenstates_animation.py` displays eigenstates in various potentials, and `compare_with_analytic.py` compares
-numerically computed energy eigenvalues of the Harmonic Oscillator and Infinite Square Well with their analytical versions. 
+numerically computed energy eigenvalues of the Harmonic Oscillator and Infinite Square Well with their analytical versions. The file `self_contained_example.py` is meant to be a short, standalone example of finding the eigenvalues and eigenstates of the discrete Hamiltonian.
+
+Thanks to [rafael-fuente](https://github.com/rafael-fuente) for giving the suggestion to use kron/kronsum instead of using for loops to construct the Hamiltonian.
 
 ## References:
 
 Discretizing the Hamiltonian:
  - [Discretization of 1D continuous Hamiltonian](https://wiki.physics.udel.edu/phys824/Discretization_of_1D_continuous_Hamiltonian)
+
+Using 2D Grids for higher dimensional discrete operators (credit to [rafael-fuente](https://github.com/rafael-fuente) for the suggestion):
+ - [Kronecker sum of discrete Laplacians](https://en.wikipedia.org/wiki/Kronecker_sum_of_discrete_Laplacians)
+ - [Scipy Kronecker product](https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.kron.html)
 
 Discrete Laplacian stencils:
 - [Wikipedia - Image Processing via operator discretization](https://en.wikipedia.org/wiki/Discrete_Laplace_operator#Implementation%20via%20operator%20discretization)

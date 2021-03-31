@@ -1,13 +1,11 @@
 import numpy as np
+import scipy.sparse as sparse
 from constants import *
 
 
-def discrete_hamiltonian(V: np.ndarray) -> np.ndarray:
+def discrete_hamiltonian(V: np.ndarray):
     """
     Given the potential V, return the discretized Hamiltonian.
-    Note that the discretized Hamiltonian is 4-dimensional.
-    You will need to flatten it to 2D if you want to find its eigenvalues
-    and eigenvectors with eigh or eigsh. 
 
     Reference to discretize the Hamiltonian:
     https://wiki.physics.udel.edu/phys824/
@@ -16,26 +14,16 @@ def discrete_hamiltonian(V: np.ndarray) -> np.ndarray:
     Discretizing the Laplacian:
     https://en.wikipedia.org/wiki/Discrete_Laplace_operator#
     Implementation_via_operator_discretization
+
+    Kronecker sum of discrete Laplacians:
+    https://en.wikipedia.org/wiki/Kronecker_sum_of_discrete_Laplacians
     """
-    # TODO: Allocating H uses a lot of unnecessary memory since it's
-    # a sparse symmetric matrix. Use Scipy diagonals instead
-    # (figure out how to use it to model the 
-    #  4 index Hamiltonian).
-    H = np.zeros([N, N, N, N], dtype=np.float32)
-    for i in range(N):
-        for j in range(N):
-            H[i, j, i, j] = 3*HBAR**2/(2*M_E*DX**2) + V[i, j]
-            if (i+1 < N): 
-                H[i+1, j, i, j] = -0.5*HBAR**2/(2*M_E*DX**2)
-                if (j+1 < N): H[i+1, j+1, i, j] = -0.25*HBAR**2/(2*M_E*DX**2)
-                if (j-1 >= 0): H[i+1, j-1, i, j] = -0.25*HBAR**2/(2*M_E*DX**2)
-            if (i-1 >= 0): 
-                H[i-1, j, i, j] = -0.5*HBAR**2/(2*M_E*DX**2)
-                if (j+1 < N): H[i-1, j+1, i, j] = -0.25*HBAR**2/(2*M_E*DX**2)
-                if (j-1 >= 0): H[i-1, j-1, i, j] = -0.25*HBAR**2/(2*M_E*DX**2)
-            if (j+1 < N): H[i, j+1, i, j] = -0.5*HBAR**2/(2*M_E*DX**2)
-            if (j-1 >= 0): H[i, j-1, i, j] = -0.5*HBAR**2/(2*M_E*DX**2)
-    return H
+    diag = HBAR**2/(2*M_E*DX**2)*np.ones([N])
+    diags = np.array([-diag, 2.0*diag, -diag])
+    kinetic_1d = sparse.spdiags(diags, np.array([1.0, 0.0, -1.0]), N, N)
+    T = sparse.kronsum(kinetic_1d, kinetic_1d)
+    U = sparse.diags((V.reshape(N*N)), (0))
+    return T + U
 
 
 if __name__ == '__main__':
@@ -49,7 +37,7 @@ if __name__ == '__main__':
 
     H = discrete_hamiltonian(V).reshape([N*N, N*N])
     ds_eigvals, ds_eigvects =  eigsh(H, which='SM', k=100)
-    psi0 = np.exp((-(X/L)**2 - (Y/L + 0.25)**2)/(0.5*0.2**2))
+    psi0 = np.exp((-(X/L)**2 - (Y/L + 0.25)**2)/(0.5*0.18**2))
     coeffs = np.dot(psi0.reshape(N*N), ds_eigvects)
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
@@ -65,12 +53,13 @@ if __name__ == '__main__':
     data = {'t': 0.0}
 
     def animation_func(*arg):
-        data['t'] += 0.01
+        data['t'] += 0.1
         psi = np.dot(coeffs*np.exp(-1.0j*ds_eigvals*data['t']/HBAR),
                      ds_eigvects.T)
         im.set_data(complex_to_colour(psi.reshape([N, N]), dyn_alpha=False))
         return im, im2,
 
-    ani = animation.FuncAnimation(fig, animation_func, blit=True, interval=1.0)
+    ani = animation.FuncAnimation(fig, animation_func, 
+                                  blit=True, interval=1.0)
     plt.show()
 
