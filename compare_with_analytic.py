@@ -47,7 +47,7 @@ def plot(values, analytic_energies, title):
 V = np.zeros([N, N])
 H = discrete_hamiltonian(V)
 H = H.reshape([N*N, N*N])
-values, vectors = eigsh(H, which='SM', k=k)
+values, vectors = eigsh(H, which='LM', k=k, sigma=0.0)
 isw_analytic_energies = []
 for n in range(1, 20):
     for m in range(1, 20):

@@ -36,7 +36,7 @@ if __name__ == '__main__':
     V = 50.0*((X/L)**2 + (Y/L)**2)
 
     H = discrete_hamiltonian(V).reshape([N*N, N*N])
-    ds_eigvals, ds_eigvects =  eigsh(H, which='SM', k=100)
+    ds_eigvals, ds_eigvects =  eigsh(H, which='LM', k=100, sigma=0.0)
     psi0 = np.exp((-(X/L)**2 - (Y/L + 0.25)**2)/(0.5*0.18**2))
     coeffs = np.dot(psi0.reshape(N*N), ds_eigvects)
     fig = plt.figure()

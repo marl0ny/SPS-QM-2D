@@ -23,10 +23,10 @@ U = sparse.diags((V.reshape(N*N)), (0))
 H = T + U
 
 k = 10 # Number of eigenvectors to compute.
-eigenvalues, eigenvectors = eigsh(H, which='SM', k=k)
+eigenvalues, eigenvectors = eigsh(H, which='LM', k=k, sigma=0.0)
 # Show the eigenvector. Change the value of m as long as 0 <= m < k.
 m = 5
-plt.imshow(eigenvectors.T[m].reshape([N, N]), 
+plt.imshow(eigenvectors.T[m].reshape([N, N]), interpolation='bilinear',
            extent=(X[0, 0], X[0, -1], Y[0, 0], Y[-1, 0]))
 plt.title(f'Eigenstate, N={m}')
 plt.show()

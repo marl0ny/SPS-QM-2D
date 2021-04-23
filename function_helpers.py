@@ -30,29 +30,3 @@ def norm(v):
     """
     return v/np.sqrt(np.sum(v*np.conj(v)))
 
-
-def toggle_blit(animator) -> None:
-    """
-    Enable or disable blit. This makes it possible to
-    update the plot title and axes, which would otherwise
-    be static with blit always enabled.
-    """
-    if animator._blit:
-        base = 100.0
-        version_number = 0
-        for n in matplotlib.__version__.split('.'):
-            version_number += int(n)*base
-            base /= 10.0
-        if version_number < 330.0:
-            animator._blit_clear(
-                animator._drawn_artists, 
-                animator._blit_cache)
-        else:
-            animator._blit_clear(
-                animator._drawn_artists)
-        animator._blit = False
-    else:
-        # animator._init_draw()
-        animator._step()
-        animator._blit = True
-        animator._setup_blit()

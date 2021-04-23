@@ -77,7 +77,7 @@ V = 50.0*(1.0 - np.exp(-0.5*((X/L)**2 + (Y/L - 0.25)**2)/s**2)
 t = perf_counter()
 H = discrete_hamiltonian(V)
 H = H.reshape([N*N, N*N])
-values, vectors = eigsh(H, which='SM', k=M)
+values, vectors = eigsh(H, which='LM', k=M, sigma=0)
 print(f"Time taken: {perf_counter() - t} s")
 V = V.T
 data = {'t': 0.0, 'e': np.exp(2.0j*np.pi/32.0), 
