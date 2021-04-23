@@ -65,7 +65,7 @@ V = M_E*K*((X/L)**2 + (Y/L)**2)/2.0
 OMEGA = np.sqrt(K/L**2)
 H = discrete_hamiltonian(V)
 H = H.reshape([N*N, N*N])
-values, vectors = eigsh(H, which='SM', k=k)
+values, vectors = eigsh(H, which='LM', k=k, sigma=0.0)
 sho_analytic_energies = []
 for n in range(20):
     for m in range(20):

@@ -7,7 +7,7 @@ mostly commented-out potentials that you can try out.
 """
 from discrete_hamiltonian import discrete_hamiltonian
 from constants import *
-from function_helpers import toggle_blit, complex_to_colour, norm
+from function_helpers import complex_to_colour, norm
 from time import perf_counter
 import numpy as np
 from scipy.sparse.linalg import eigsh
